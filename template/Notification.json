@@ -1,0 +1,107 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Creates a CloudWatch Event Rule which forwards findings to SNS Topic for HTTP endpoint",
+    "Resources": {
+        "EventRule": {
+            "Type": "AWS::Events::Rule",
+            "Properties": {
+                "Name": "detect-securityhub-finding",
+                "Description": "A CloudWatch Event Rule that triggers on AWS Security Hub findings. The Event Rule can be used to trigger notifications or remediative actions using AWS Lambda.",
+                "State": "ENABLED",
+                "Targets": [
+                    {
+                        "Arn": {
+                            "Ref": "SnsTopic"
+                        },
+                        "Id": "target-id1"
+                    }
+                ],
+                "EventPattern": {
+                    "detail-type": [
+                        "Security Hub Findings - Imported"
+                    ],
+                    "source": [
+                        "aws.securityhub"
+                    ],
+                    "detail": {
+                        "findings": {
+                           "Severity": {
+                              "Normalized": [
+                                 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39
+                              ]
+                           }
+                        }
+                     }
+                }
+            }
+        },
+        "SnsTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "Subscription": [
+                    {
+                        "Endpoint": "eddielzx@hotmail.com",
+                        "Protocol": "email"
+                    }
+                ],
+                "TopicName": "event-rule-action"
+            }
+        },
+        "SnsTopicPolicy": {
+            "Type": "AWS::SNS::TopicPolicy",
+            "Properties": {
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Sid": "__default_statement_ID",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": "*"
+                            },
+                            "Action": [
+                                "SNS:GetTopicAttributes",
+                                "SNS:SetTopicAttributes",
+                                "SNS:AddPermission",
+                                "SNS:RemovePermission",
+                                "SNS:DeleteTopic",
+                                "SNS:Subscribe",
+                                "SNS:ListSubscriptionsByTopic",
+                                "SNS:Publish",
+                                "SNS:Receive"
+                            ],
+                            "Resource": {
+                                "Ref": "SnsTopic"
+                            },
+                            "Condition": {
+                                "StringEquals": {
+                                    "AWS:SourceOwner": {
+                                        "Ref": "AWS::AccountId"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "Sid": "TrustCWEToPublishEventsToMyTopic",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "events.amazonaws.com"
+                            },
+                            "Action": "sns:Publish",
+                            "Resource": {
+                                "Ref": "SnsTopic"
+                            }
+                        }
+                    ]
+                },
+                "Topics": [
+                    {
+                        "Ref": "SnsTopic"
+                    }
+                ]
+            }
+        }
+    },
+    "Parameters": {},
+    "Metadata": {},
+    "Conditions": {}
+}

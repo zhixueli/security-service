@@ -86,7 +86,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Create Stackset and Instances')
     parser.add_argument('--name', type=str, required=True, help="Stackset Name")
     parser.add_argument('--template', type=str, required=True, help='Path to Cloudformation template file')
-    parser.add_argument('--parameters', type=str, required=True, help='Path to parameters json file')
+    parser.add_argument('--parameters', type=str, help='Path to parameters json file')
     parser.add_argument('--self', action="store_true", help="indicate if permission model self managed")
     parser.add_argument('--enabled_regions', type=str, help="comma separated list of regions to deploy stackset instances. If not specified, all available regions deployed")
     parser.add_argument('--manage_account', type=str, help="AccountId for Management Account")
@@ -94,13 +94,15 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     self_managed_permission = args.self
+    parameter_data = []
 
     if utils.stackset_exists(args.name):
         print('Stackset {} existed'.format(args.name))
     else:
         print('Creating stackset {}'.format(args.name))
         template_data = utils.parse_template(args.template)
-        parameter_data = utils.parse_parameters(args.parameters)
+        if args.parameters != None:
+            parameter_data = utils.parse_parameters(args.parameters)
         if self_managed_permission:
             model = 'SELF_MANAGED'
         else:

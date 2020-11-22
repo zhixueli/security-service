@@ -108,3 +108,41 @@ python disablesecurityhub.py \
     data/accounts.csv
 
 ```
+### 6. 在主账号中配置CloudWatch Event + SNS
+```
+python create_update_stack.py \
+    --name SecurityHubNotification \
+    --template template/Notification.json \
+    --enabled_regions us-east-1,us-west-2,ap-southeast-1
+
+```
+* 命令参数--name参数指定CloudFormation模板名称
+* 命令参数--enabled_regions指定启用服务的区域，多个区域使用逗号隔开
+* CloudFormation模板文件中可以定义来自SecurityHub安全事件触发CloudWatch Event的规则，比如只有特定安全级别的发现才发送通知，可以在模板文件中的EventPattern模块中配置Normalized参数，本例中只对Low级别的安全发现发送通知：
+```
+"EventPattern": {
+    "detail-type": [
+        "Security Hub Findings - Imported"
+    ],
+    "source": [
+        "aws.securityhub"
+    ],
+    "detail": {
+        "findings": {
+            "Severity": {
+                "Normalized": [
+                    1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39
+                ]
+            }
+        }
+    }
+}
+```
+* 其中Normalized参数与安全级别对应如下
+```
+0 - INFORMATIONAL
+1–39 - LOW
+40–69 - MEDIUM
+70–89 - HIGH
+90–100 - CRITICAL
+```

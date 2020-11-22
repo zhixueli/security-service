@@ -108,7 +108,7 @@ python disablesecurityhub.py \
     data/accounts.csv
 
 ```
-### 6. 在主账号中配置CloudWatch Event + SNS
+### 7. 在主账号中配置CloudWatch Event + SNS
 ```
 python create_update_stack.py \
     --name SecurityHubNotification \
@@ -138,7 +138,7 @@ python create_update_stack.py \
     }
 }
 ```
-* 其中Normalized参数与安全级别对应如下
+* 其中Normalized参数与安全级别对应如下。详情请参考：https://docs.aws.amazon.com/zh_cn/securityhub/1.0/APIReference/API_Severity.html，https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html
 ```
 0 - INFORMATIONAL
 1–39 - LOW

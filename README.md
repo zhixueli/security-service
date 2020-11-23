@@ -118,7 +118,7 @@ python create_update_stack.py \
 ```
 * 命令参数--name参数指定CloudFormation模板名称
 * 命令参数--enabled_regions指定启用服务的区域，多个区域使用逗号隔开
-* CloudFormation模板文件中可以定义来自SecurityHub安全事件触发CloudWatch Event的规则，比如只有特定安全级别的发现才发送通知，可以在模板文件中的EventPattern模块中配置Normalized参数，本例中只对Low级别的安全发现发送通知：
+* CloudFormation模板文件中可以定义来自SecurityHub安全事件触发CloudWatch Event的规则，比如只有特定安全级别的发现才发送通知，可以在模板文件中的EventPattern模块中配置Label参数，本例中只对MEDIUM，HIGH，CRITICAL三个级别的安全发现发送通知：
 ```
 "EventPattern": {
     "detail-type": [

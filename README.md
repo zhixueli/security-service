@@ -130,15 +130,15 @@ python create_update_stack.py \
     "detail": {
         "findings": {
             "Severity": {
-                "Normalized": [
-                    1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39
+                "Label": [
+                    "MEDIUM","HIGH","CRITICAL"
                 ]
             }
         }
     }
 }
 ```
-* 其中Normalized参数与安全级别对应如下。详情请参考：https://docs.aws.amazon.com/zh_cn/securityhub/1.0/APIReference/API_Severity.html，https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html
+* 其中LABEL参数用于定义需要处理时间的安全级别。详情请参考：https://docs.aws.amazon.com/zh_cn/securityhub/1.0/APIReference/API_Severity.html，https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html
 ```
 0 - INFORMATIONAL
 1–39 - LOW
